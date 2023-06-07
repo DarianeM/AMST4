@@ -1,5 +1,6 @@
 package com.example.appamst4;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.appamst4.databinding.ActivityMapaViewBinding;
 
-public class mapa_view extends FragmentActivity implements OnMapReadyCallback {
+public class mapa_view extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
     private ActivityMapaViewBinding binding;
@@ -25,8 +26,7 @@ public class mapa_view extends FragmentActivity implements OnMapReadyCallback {
         setContentView(binding.getRoot());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -43,9 +43,28 @@ public class mapa_view extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        this.mMap.setOnMapClickListener(this);
+        this.mMap.setOnMapLongClickListener(this);
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng espol = new LatLng(-2.145777, -79.966914);
+        mMap.addMarker(new MarkerOptions().position(espol).title("ESPOL"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(espol));
+    }
+
+    @Override
+    public void onMapLongClick(@NonNull LatLng latLng) {
+        mMap.clear();
+        LatLng posicion = new LatLng(latLng.latitude,latLng.longitude);
+        mMap.addMarker(new MarkerOptions().position(posicion).title(""));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(posicion));
+    }
+
+    @Override
+    public void onMapClick(@NonNull LatLng latLng) {
+        mMap.clear();
+        LatLng posicion = new LatLng(latLng.latitude,latLng.longitude);
+        mMap.addMarker(new MarkerOptions().position(posicion).title(""));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(posicion));
     }
 }
